@@ -1,0 +1,10 @@
+Import-Module ActiveDirectory
+
+$Date = (Get-Date).AddMonths(-6)
+
+Get-ADUser -Filter {
+    Enabled -eq $true -and LastLogonDate -ge $Date
+} -Properties LastLogonDate, Mail, Department |
+Select-Object Name, SamAccountName, UserPrincipalName, Enabled, LastLogonDate, Mail, Department |
+Sort-Object LastLogonDate -Descending |
+Export-Csv "$env:USERPROFILE\Desktop\ActiveUsers_6Months\Active_AD_Users_Last_6_Months.csv" -NoTypeInformation
